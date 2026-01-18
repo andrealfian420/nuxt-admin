@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --color-primary-50: #ecfdf5;
+  --color-primary-500: #10b981;
+  --color-surface-ground: #f8fafc;
+}
+
+/* Global Reset */
+body {
+  background-color: var(--color-surface-ground);
+  color: #334155;
+}

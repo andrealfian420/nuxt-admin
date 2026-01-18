@@ -1,0 +1,111 @@
+<template>
+  <div
+    class="min-h-screen flex items-center justify-center bg-slate-50 px-4 font-sans text-slate-800"
+  >
+    <div
+      class="w-full max-w-sm bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden"
+    >
+      <div class="px-8 pt-10 pb-8 text-center">
+        <div
+          class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-50 mb-4 text-emerald-600"
+        >
+          <Icon name="lucide:zap" class="w-6 h-6" />
+        </div>
+        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">
+          Admin Login
+        </h1>
+        <p class="text-slate-500 text-sm mt-2">
+          Enter your credentials to access the dashboard
+        </p>
+      </div>
+
+      <form @submit.prevent="handleLogin" class="px-8 pb-10 space-y-5">
+        <div class="space-y-1.5">
+          <label
+            for="email"
+            class="block text-xs font-semibold text-slate-600 uppercase tracking-wider"
+          >
+            Email Address
+          </label>
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400"
+            >
+              <Icon name="lucide:mail" class="w-5 h-5" />
+            </div>
+            <input
+              id="email"
+              type="email"
+              v-model="email"
+              placeholder="Enter your email"
+              required
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder-slate-400 outline-none transition-all focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+            />
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label
+              for="password"
+              class="block text-xs font-semibold text-slate-600 uppercase tracking-wider"
+            >
+              Password
+            </label>
+            <a
+              href="#"
+              class="text-xs text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+            >
+              Forgot password?
+            </a>
+          </div>
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400"
+            >
+              <Icon name="lucide:lock" class="w-5 h-5" />
+            </div>
+            <input
+              id="password"
+              type="password"
+              v-model="password"
+              placeholder="Enter your password"
+              required
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-900 placeholder-slate-400 outline-none transition-all focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+            />
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          :disabled="isLoading"
+          class="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-emerald-600/20 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+        >
+          <span v-if="!isLoading">Sign In</span>
+          <span v-else class="flex items-center gap-2">
+            <Icon name="lucide:loader-2" class="w-4 h-4 animate-spin" />
+            Signing in...
+          </span>
+        </button>
+      </form>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+const router = useRouter();
+
+const email = ref('');
+const password = ref('');
+const isLoading = ref(false);
+
+const handleLogin = () => {
+  isLoading.value = true;
+
+  setTimeout(() => {
+    isLoading.value = false;
+    router.push('/admin/dashboard');
+  }, 1000);
+};
+</script>
