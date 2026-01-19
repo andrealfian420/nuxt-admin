@@ -17,37 +17,7 @@
         >
       </div>
 
-      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-        <template v-for="item in menuItems" :key="item.key">
-          <div
-            v-if="item.separator"
-            class="border-t border-slate-100 my-4"
-          ></div>
-
-          <NuxtLink
-            v-else
-            :to="item.to"
-            @click="checkMobileClose"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all group"
-            :class="[
-              route.path === item.to
-                ? 'bg-emerald-50 text-emerald-700 font-semibold'
-                : 'text-slate-600 hover:bg-emerald-50 hover:text-emerald-700',
-            ]"
-          >
-            <Icon
-              :name="item.icon"
-              class="w-5 h-5 transition-colors"
-              :class="
-                route.path === item.to
-                  ? 'text-emerald-700'
-                  : 'text-slate-400 group-hover:text-emerald-600'
-              "
-            />
-            <span class="font-medium text-sm">{{ item.label }}</span>
-          </NuxtLink>
-        </template>
-      </nav>
+      <AdminSidebarMenu :items="menuItems" @item-click="checkMobileClose" />
 
       <div class="p-4 border-t border-slate-100 cursor-pointer">
         <UDropdownMenu
@@ -88,34 +58,5 @@
 <script setup>
 const { isOpen, checkMobileClose, close } = useSidebar();
 const { profileItems } = useProfileMenu();
-const route = useRoute();
-
-// format icon: "collection:icon-name"
-const menuItems = ref([
-  {
-    label: 'Dashboard',
-    icon: 'i-lucide-layout-dashboard',
-    key: 'dash',
-    to: '/admin/dashboard',
-  },
-  {
-    label: 'Transactions',
-    icon: 'i-lucide-receipt-text',
-    key: 'trans',
-    to: '/admin/transactions',
-  },
-  {
-    label: 'Users',
-    icon: 'i-lucide-users',
-    key: 'user',
-    to: '/admin/users',
-  },
-  { separator: true },
-  {
-    label: 'Settings',
-    icon: 'i-lucide-settings',
-    key: 'set',
-    to: '/admin/settings',
-  },
-]);
+const menuItems = useAdminMenu().items;
 </script>

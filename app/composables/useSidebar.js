@@ -22,7 +22,7 @@ export const useSidebar = () => {
 
   const checkMobileClose = () => {
     if (window.innerWidth < 1024) {
-      showSidebar.value = false;
+      isOpen.value = false;
     }
   };
 
