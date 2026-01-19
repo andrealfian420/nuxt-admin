@@ -13,5 +13,5 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
 
-  modules: ['@nuxt/icon'],
+  modules: ['@nuxt/icon', '@nuxt/ui'],
 });

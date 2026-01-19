@@ -1,9 +1,3 @@
-<script setup>
-definePageMeta({
-  layout: 'dashboard',
-});
-</script>
-
 <template>
   <div>
     <div
@@ -18,3 +12,13 @@ definePageMeta({
     </div>
   </div>
 </template>
+
+<script setup>
+definePageMeta({
+  layout: 'dashboard',
+});
+
+useHead({
+  title: 'Web Admin - Dashboard',
+});
+</script>

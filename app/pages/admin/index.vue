@@ -94,6 +94,11 @@
 
 <script setup>
 import { ref } from 'vue';
+
+useHead({
+  title: 'Web Admin',
+});
+
 const router = useRouter();
 
 const email = ref('');

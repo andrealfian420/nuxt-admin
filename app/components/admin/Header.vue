@@ -11,10 +11,24 @@
       <Icon name="lucide:menu" class="w-10 h-10" />
     </button>
 
-    <div class="flex-1"></div>
+    <UDropdownMenu
+      :items="profileItems"
+      :ui="{
+        item: 'cursor-pointer text-slate-600! hover:bg-emerald-50! hover:text-emerald-700! hover:font-semibold!',
+        itemLeadingIcon: 'cursor-pointer  hover:bg-emerald-700! ',
+      }"
+    >
+      <UAvatar
+        src="https://ui-avatars.com/api/?name=A+R&background=059669&color=fff&size=128"
+        size="xl"
+        class="w-10 h-10 rounded-full object-cover border border-slate-200 shadow-sm cursor-pointer"
+        alt="John Doe"
+      />
+    </UDropdownMenu>
   </header>
 </template>
 
 <script setup>
-const { isOpen, toggle } = useSidebar();
+const { toggle } = useSidebar();
+const { profileItems } = useProfileMenu();
 </script>
