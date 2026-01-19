@@ -1,20 +1,14 @@
 <template>
   <div>
-    <UBreadcrumb :links="links" />
-
     <div
-      class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 space-y-6"
+      class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 space-y-6 mb-2"
     >
-      <div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
-          User Management
-        </h1>
-        <p class="text-slate-500 mt-1 text-sm">
-          Manage access, roles, and user statuses.
-        </p>
+      <div class="mb-0">
+        <h1 class="text-2xl font-bold text-slate-900">User Management</h1>
+        <UBreadcrumb :items="links" class="my-2" />
       </div>
       <UButton
-        class="flex items-center justify-center mb-4 md:mb-0 w-[20%] gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-emerald-600/20 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed mt-2 cursor-pointer"
+        class="flex items-center justify-center mb-4 md:mb-0 w-48 gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-emerald-600/20 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed mt-2 cursor-pointer"
         icon="i-heroicons-plus"
         label="Add New User"
       />
@@ -34,14 +28,21 @@
               icon="i-heroicons-magnifying-glass-20-solid"
               placeholder="Search users..."
               color="white"
+              :loading="isLoading"
             />
           </div>
         </div>
       </template>
 
-      <UTable :data="users" :columns="columns" class="flex-1" />
+      <UTable
+        ref="table"
+        :data="rows"
+        :columns="columns"
+        :loading="isLoading"
+        class="flex-1"
+      />
 
-      <!-- <template #footer>
+      <template #footer>
         <div
           class="flex flex-col sm:flex-row justify-between items-center gap-4 py-2"
         >
@@ -49,21 +50,21 @@
             Showing
             <span class="font-medium">{{ (page - 1) * pageCount + 1 }}</span> to
             <span class="font-medium">{{
-              Math.min(page * pageCount, filteredRows.length)
+              Math.min(page * pageCount, totalData)
             }}</span>
             of
-            <span class="font-medium">{{ filteredRows.length }}</span> results
+            <span class="font-medium">{{ totalData }}</span> results
           </span>
 
           <UPagination
             v-model="page"
             :page-count="pageCount"
-            :total="filteredRows.length"
+            :total="totalData"
             :active-button="{ color: 'emerald', variant: 'solid' }"
             :inactive-button="{ color: 'gray', variant: 'ghost' }"
           />
         </div>
-      </template> -->
+      </template>
     </UCard>
   </div>
 </template>
@@ -76,66 +77,6 @@ definePageMeta({
 useHead({
   title: 'Web Admin - Users',
 });
-
-// Dummy Data
-const users = ref([
-  {
-    id: 1,
-    name: 'Lindsay Walton',
-    email: 'lindsay.walton@example.com',
-    role: 'Admin',
-    status: 'Active',
-    avatar: 'https://i.pravatar.cc/150?u=1',
-  },
-  {
-    id: 2,
-    name: 'Courtney Henry',
-    email: 'courtney.henry@example.com',
-    role: 'Editor',
-    status: 'Active',
-    avatar: 'https://i.pravatar.cc/150?u=2',
-  },
-  {
-    id: 3,
-    name: 'Tom Cook',
-    email: 'tom.cook@example.com',
-    role: 'Viewer',
-    status: 'Active',
-    avatar: 'https://i.pravatar.cc/150?u=3',
-  },
-  {
-    id: 4,
-    name: 'Whitney Francis',
-    email: 'whitney.francis@example.com',
-    role: 'Editor',
-    status: 'Active',
-    avatar: 'https://i.pravatar.cc/150?u=4',
-  },
-  {
-    id: 5,
-    name: 'Leonard Krasner',
-    email: 'leonard.krasner@example.com',
-    role: 'Admin',
-    status: 'Inactive',
-    avatar: 'https://i.pravatar.cc/150?u=5',
-  },
-  {
-    id: 6,
-    name: 'Floyd Miles',
-    email: 'floyd.miles@example.com',
-    role: 'Viewer',
-    status: 'Active',
-    avatar: 'https://i.pravatar.cc/150?u=6',
-  },
-  {
-    id: 7,
-    name: 'Emily Selman',
-    email: 'emily.selman@example.com',
-    role: 'Editor',
-    status: 'Active',
-    avatar: 'https://i.pravatar.cc/150?u=7',
-  },
-]);
 
 // Table Columns
 const columns = [
@@ -171,13 +112,17 @@ const columns = [
       td: 'text-right font-medium',
     },
     cell: ({ row }) => {
-      const color = {
-        Active: 'success',
-        Inactive: 'error',
-      }[row.getValue('status')];
+      const statusVal = row.getValue('status');
+      const colorMap = { Active: 'success', Inactive: 'error' };
 
-      return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () =>
-        row.getValue('status')
+      return h(
+        UBadge,
+        {
+          class: 'capitalize',
+          variant: 'subtle',
+          color: colorMap[statusVal] || 'gray',
+        },
+        () => statusVal,
       );
     },
     sortable: true,
@@ -205,7 +150,7 @@ const columns = [
             variant: 'ghost',
             'aria-label': 'Actions dropdown',
             class: 'cursor-pointer',
-          })
+          }),
       );
     },
   },
@@ -223,17 +168,61 @@ function getRowItems(row) {
 }
 
 // Breadcrumb Links
-const links = [
+const links = ref([
   {
     label: 'Dashboard',
-    icon: 'i-heroicons-home',
+    icon: 'i-lucide-layout-dashboard',
     to: '/admin/dashboard',
   },
   {
-    label: 'Users',
-    icon: 'i-heroicons-users',
+    label: 'User Management',
+    icon: 'i-lucide-users',
+    to: '/admin/users',
   },
-];
+]);
 
 const globalFilter = ref('');
+
+// Pagination config
+const page = ref(1);
+const pageCount = ref(5);
+const rows = ref([]);
+const totalData = ref(0);
+const isLoading = ref(false);
+
+// Fetch Table Data
+const fetchData = async () => {
+  isLoading.value = true;
+  try {
+    // Pakai $fetch biasa
+    const result = await $fetch('/api/users', {
+      method: 'GET',
+      query: {
+        page: page.value, // Kirim value halaman saat ini
+        limit: pageCount.value, // Kirim limit
+        q: globalFilter.value, // Kirim keyword search
+      },
+    });
+
+    // Update state manual
+    rows.value = result.users;
+    totalData.value = result.total;
+  } catch (error) {
+    console.error('Gagal ambil data:', error);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+watch(page, () => {
+  fetchData();
+});
+
+watch(globalFilter, () => {
+  page.value = 1;
+});
+
+onMounted(() => {
+  fetchData();
+});
 </script>
