@@ -14,4 +14,9 @@ export default defineNuxtConfig({
   },
 
   modules: ['@nuxt/icon', '@nuxt/ui'],
+
+  // temporary disable colormode, for future darkmode config
+  ui: {
+    colorMode: false,
+  },
 });
