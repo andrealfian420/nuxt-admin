@@ -102,8 +102,8 @@ const props = defineProps({
     default: '',
   },
   query: {
-    type: [Array, String, Object],
-    default: () => [],
+    type: Object,
+    default: () => ({}),
   },
   showRowsPerPage: {
     type: Boolean,
@@ -138,14 +138,21 @@ const onPageChange = async (newPage) => {
 const fetchData = async () => {
   isLoading.value = true;
   try {
+    let queryParams = {
+      page: page.value,
+      limit: limit.value,
+      q: search.value,
+    };
+
+    if (props.query && typeof props.query === 'object') {
+      queryParams = { ...queryParams, ...props.query };
+    }
+
     const result = await $fetch(props.apiUrl, {
       method: 'GET',
-      query: {
-        page: page.value,
-        limit: limit.value,
-        q: search.value,
-      },
+      query: queryParams,
     });
+
     rows.value = result.data;
     totalData.value = result.total;
   } catch (error) {
@@ -164,6 +171,15 @@ watch(limit, async () => {
   page.value = 1;
   await fetchData();
 });
+
+watch(
+  () => props.query,
+  async () => {
+    page.value = 1;
+    await fetchData();
+  },
+  { deep: true },
+);
 
 defineExpose({
   refresh: fetchData,
