@@ -229,7 +229,7 @@ export default defineEventHandler((event) => {
 
   return {
     total: filteredData.length,
-    users: paginatedData,
+    data: paginatedData,
     page: page,
     limit: limit,
   };
