@@ -25,6 +25,7 @@
           class="flex items-center justify-center mb-4 md:mb-0 w-48 gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-emerald-600/20 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed mt-2 cursor-pointer"
           icon="i-lucide-plus"
           label="Add New User"
+          to="/admin/users/create"
         />
       </div>
     </div>
