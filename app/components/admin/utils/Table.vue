@@ -141,7 +141,7 @@ const fetchData = async () => {
     let queryParams = {
       page: page.value,
       limit: limit.value,
-      q: search.value,
+      search: search.value,
     };
 
     if (props.query && typeof props.query === 'object') {

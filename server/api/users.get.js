@@ -212,7 +212,7 @@ export default defineEventHandler((event) => {
   const page = parseInt(query.page) || 1;
   const limit = parseInt(query.limit) || 5;
 
-  const search = (query.q || '').toLowerCase();
+  const search = (query.search || '').toLowerCase();
 
   // filtering logic
   let filteredData = dbUsers.filter((user) => {
