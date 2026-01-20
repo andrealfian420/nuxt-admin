@@ -5,7 +5,14 @@
     >
       <div class="mb-0">
         <h1 class="text-2xl font-bold text-slate-900">Role Management</h1>
-        <UBreadcrumb :items="links" class="my-2" />
+        <UBreadcrumb
+          :items="links"
+          class="my-2"
+          :ui="{
+            linkLabel:
+              'cursor-pointer hover:text-[#00c951] hover:font-semibold',
+          }"
+        />
       </div>
       <div class="flex gap-2">
         <UButton
