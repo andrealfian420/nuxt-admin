@@ -19,4 +19,8 @@ export default defineNuxtConfig({
   ui: {
     colorMode: false,
   },
+
+  routeRules: {
+    '/admin/**': { ssr: false }, // all admin rules rendered with SPA mode
+  },
 });
