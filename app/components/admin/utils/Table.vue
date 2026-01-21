@@ -1,5 +1,64 @@
 <template>
+  <!-- Skeleton loading -->
   <UCard
+    v-if="initialLoading"
+    :ui="{
+      body: { padding: 'p-0 sm:p-0' },
+      header: { padding: 'p-4 sm:px-6' },
+    }"
+  >
+    <template #header>
+      <div class="flex justify-between items-center gap-4">
+        <USkeleton class="h-8 w-full sm:w-72 rounded-md" />
+      </div>
+    </template>
+
+    <div class="divide-y divide-gray-200 dark:divide-gray-800">
+      <div
+        class="px-6 py-3.5 grid grid-cols-4 gap-4 bg-gray-50/50 dark:bg-gray-800/50"
+      >
+        <USkeleton class="h-4 w-8" />
+        <USkeleton class="h-4 w-32" />
+        <USkeleton class="h-4 w-48" />
+        <USkeleton class="h-4 w-24 ml-auto" />
+      </div>
+
+      <div
+        v-for="i in 5"
+        :key="i"
+        class="px-6 py-4 grid grid-cols-4 gap-4 items-center"
+      >
+        <USkeleton class="h-4 w-8" />
+
+        <div class="flex items-center gap-3">
+          <USkeleton class="h-8 w-8 rounded-full" />
+          <USkeleton class="h-4 w-24" />
+        </div>
+
+        <USkeleton class="h-4 w-full max-w-50" />
+
+        <USkeleton class="h-6 w-16 rounded-full ml-auto" />
+      </div>
+    </div>
+
+    <template #footer>
+      <div
+        class="flex flex-col sm:flex-row justify-between items-center gap-4 py-2"
+      >
+        <USkeleton class="h-4 w-48" />
+
+        <div class="flex gap-2 items-center">
+          <USkeleton class="h-4 w-24 hidden sm:block" />
+          <USkeleton class="h-8 w-16 rounded-md" />
+
+          <USkeleton class="h-8 w-48 rounded-md" />
+        </div>
+      </div>
+    </template>
+  </UCard>
+
+  <UCard
+    v-else
     :ui="{
       body: { padding: 'p-0 sm:p-0' },
       header: { padding: 'p-4 sm:px-6' },
@@ -128,6 +187,7 @@ const limit = ref(props.rowsPerPage);
 const rows = ref([]);
 const totalData = ref(0);
 const isLoading = ref(false);
+const initialLoading = ref(true);
 const search = ref('');
 
 const onPageChange = async (newPage) => {
@@ -159,6 +219,7 @@ const fetchData = async () => {
     console.error('Error fetching data:', error);
   } finally {
     isLoading.value = false;
+    initialLoading.value = false;
   }
 };
 
