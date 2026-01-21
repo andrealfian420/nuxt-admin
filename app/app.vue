@@ -1,5 +1,5 @@
 <template>
-  <UApp>
+  <UApp :toaster="toaster">
     <NuxtLoadingIndicator color="#059669" />
     <NuxtLayout>
       <NuxtPage />
@@ -7,3 +7,7 @@
     <NuxtRouteAnnouncer />
   </UApp>
 </template>
+
+<script setup>
+const toaster = { position: 'top-right' };
+</script>

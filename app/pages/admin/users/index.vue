@@ -144,6 +144,7 @@ function getRowItems(row) {
     [
       {
         label: 'Edit User',
+        to: `/admin/users/${row.original.slug}`,
       },
       {
         label: 'Delete User',

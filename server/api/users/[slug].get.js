@@ -1,5 +1,3 @@
-import { defineEventHandler, getQuery } from 'h3';
-
 // Dummy Data
 const dbUsers = [
   {
@@ -230,32 +228,17 @@ const dbUsers = [
 ];
 
 export default defineEventHandler((event) => {
-  // get query params from url
-  const query = getQuery(event);
+  // get slug from url (/api/users/testing-user)
+  const slug = getRouterParam(event, 'slug');
 
-  // parse params from string to int
-  const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 5;
+  const user = dbUsers.find((u) => u.slug === slug);
 
-  const search = (query.search || '').toLowerCase();
+  if (!user) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'User not found',
+    });
+  }
 
-  // filtering logic
-  let filteredData = dbUsers.filter((user) => {
-    return (
-      user.name.toLowerCase().includes(search) ||
-      user.email.toLowerCase().includes(search)
-    );
-  });
-
-  // pagination logic
-  const startIndex = (page - 1) * limit;
-  const endIndex = startIndex + limit;
-  const paginatedData = filteredData.slice(startIndex, endIndex);
-
-  return {
-    total: filteredData.length,
-    data: paginatedData,
-    page: page,
-    limit: limit,
-  };
+  return user;
 });
