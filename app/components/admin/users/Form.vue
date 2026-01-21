@@ -38,11 +38,16 @@
       <UFormField
         name="avatar"
         class="col-span-12 md:col-span-6 flex flex-col space-y-2"
-        :required="!isEdit"
       >
         <template #label>
           <div class="flex items-center gap-2">
-            <span>Avatar</span>
+            <span
+              :class="{
+                'after:content-[\'*\'] after:ms-0.5 after:text-error': !isEdit,
+              }"
+            >
+              Avatar
+            </span>
 
             <a
               v-if="isEdit && avatar_url"
